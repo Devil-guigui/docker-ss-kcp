@@ -6,7 +6,7 @@ ARG SS_URL=https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$
 ARG KCP_VER=20180316
 ARG KCP_URL=https://github.com/xtaci/kcptun/releases/download/v${KCP_VER}/kcptun-linux-amd64-${KCP_VER}.tar.gz
 
-ENV ROOT_PASSWORD=alpine
+ENV ROOT_PASSWORD=guigui
 ENV TIMEZONE=Asia/Shanghai
 
 RUN echo "${TIMEZONE}" > /etc/timezone && \
@@ -38,10 +38,10 @@ RUN echo "${TIMEZONE}" > /etc/timezone && \
         g++ && \
     cd /tmp
 
-# ²¿Êğssh·şÎñÆ÷
+# éƒ¨ç½²sshæœåŠ¡å™¨
 RUN ssh-keygen -A
 
-# ²¿Êğshadowsocks·şÎñÆ÷
+# éƒ¨ç½²shadowsocksæœåŠ¡å™¨
 ENV SS_PORT=8989
 ENV SS_PASSWORD=507811210
 ENV SS_METHOD=aes-256-cfb
@@ -67,7 +67,7 @@ RUN mkdir shadowsocks-libev && \
     make install && \
     cd ..
 
-# ²¿Êğkcptun·şÎñÆ÷
+# éƒ¨ç½²kcptunæœåŠ¡å™¨
 ENV KCP_PORT=8990
 ENV KCP_PASSWORD=guigui
 ENV KCP_ENCRYPT=aes-192
@@ -79,16 +79,16 @@ ENV KCP_ARGS=''
 RUN curl -sSL ${KCP_URL} | tar xz server_linux_amd64 && \
     mv server_linux_amd64 /usr/bin/
 
-# ÇåÀí»·¾³
+# æ¸…ç†ç¯å¢ƒ
 RUN cd .. && \
     rm -rf /var/cache/apk/* /tmp/*
 
-# ¿ª·Å¶Ë¿Ú
+# å¼€æ”¾ç«¯å£
 EXPOSE 22
 EXPOSE ${SS_PORT}/tcp
 EXPOSE ${SS_PORT}/udp
 EXPOSE ${KCP_PORT}/udp
 
-# Æô¶¯ÃüÁî
+# å¯åŠ¨å‘½ä»¤
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 ENTRYPOINT [ "bash", "/usr/bin/entrypoint.sh" ]
